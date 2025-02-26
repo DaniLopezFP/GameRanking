@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,13 +53,14 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(Modifier.padding(innerPadding)) {
                         //MenuPlayGames()
-                       // MenuNewPlayer(modifier = Modifier.padding(innerPadding))
+                        // MenuNewPlayer(modifier = Modifier.padding(innerPadding))
                         NavHost(
                             navController = navController,
                             startDestination = "RankingGames"
                         ) {
                             composable("NewPlayer") { MenuNewPlayer() }
-                            composable("RankingGames") {MenuPlayGames(navController) }
+                            composable("RankingGames") { MenuPlayGames(navController) }
+                            composable("Preferences") { Preferencias(navController) }
                         }
                     }
                 }
@@ -73,6 +77,7 @@ fun MenuPlayGames(navController: NavHostController) {
         Configuration.ORIENTATION_PORTRAIT -> {
             MenuVertical(navController)
         }
+
         else -> {
             MenuHorizontal(navController)
         }
@@ -90,10 +95,17 @@ fun MenuVertical(navController: NavHostController) {
         ) {
             Box(
                 modifier = Modifier
-                    .background(Color.Cyan)
-                    .size(150.dp)
+                    //.background(Color.Cyan)
+                    .size(200.dp)
             ) {
-
+                Image(
+                    painter = painterResource(R.drawable.stargame),
+                    contentDescription = "E-mail",
+                    Modifier
+                        .size(200.dp),
+                    //.weight(1f),
+                    //colorFilter = ColorFilter.tint(colorText)
+                )
             }
             Text(
                 "Game Ranking", style = TextStyle(
@@ -116,7 +128,8 @@ fun MenuVertical(navController: NavHostController) {
                 Text(text = "New Player")
             }
             Button(
-                onClick = { }, modifier = Modifier.width(200.dp)
+                onClick = { navController.navigate("Preferences") },
+                modifier = Modifier.width(200.dp)
             ) {
                 Text(text = "Preferences")
             }
@@ -164,7 +177,7 @@ fun MenuHorizontal(navController: NavHostController) {
                         fontSize = 50.sp,
                         fontFamily = courgetteRegularFamily,
                         fontWeight = FontWeight.Normal,
-                        color =  colorText
+                        color = colorText
                     )
                 )
             }
@@ -177,7 +190,8 @@ fun MenuHorizontal(navController: NavHostController) {
                     Text(text = "New Player")
                 }
                 Button(
-                    onClick = { }, modifier = Modifier.width(200.dp)
+                    onClick = { navController.navigate("Preferences") },
+                    modifier = Modifier.width(200.dp)
                 ) {
                     Text(text = "Ranking")
                 }

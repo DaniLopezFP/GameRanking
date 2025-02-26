@@ -5,15 +5,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -36,16 +41,17 @@ import com.example.gameranking_ut1.R
 import com.example.gameranking_ut1.ui.theme.colorDani
 import com.example.gameranking_ut1.ui.theme.colorText
 import com.example.gameranking_ut1.ui.theme.inversePrimaryLight
+import com.example.gameranking_ut1.ui.theme.tertiaryLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenuNewPlayer(modifier: Modifier = Modifier) {
     var EstadoNombre by remember { mutableStateOf("") }
-     var EstadoApellido by remember { mutableStateOf("") }
-     var EstadoNick by remember { mutableStateOf("") }
-     var EstadoTelf by remember { mutableStateOf("") }
-     var EstadoMail by remember { mutableStateOf("") }
-     var nameError by remember { mutableStateOf(false) } // Variable para el control de errores
+    var EstadoApellido by remember { mutableStateOf("") }
+    var EstadoNick by remember { mutableStateOf("") }
+    var EstadoTelf by remember { mutableStateOf("") }
+    var EstadoMail by remember { mutableStateOf("") }
+    var nameError by remember { mutableStateOf(false) } // Variable para el control de errores
     var pesoH = 3f
     var pesoV = 1f
     var EstadoOutlined by remember { mutableStateOf("") }
@@ -79,14 +85,36 @@ fun MenuNewPlayer(modifier: Modifier = Modifier) {
                 OutlinedTextField(
                     modifier = Modifier.weight(2f),
                     value = EstadoOutlined, onValueChange = { EstadoOutlined = it },
-                    label = { Text(text = "First Name") },
+                    label = {
+                        if (nameError) {
+                            Text(text = "*Obligatorio")
+                        } else {
+                            Text(text = "First Name")
+                        }
+                    },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Color.Cyan,
-                        unfocusedContainerColor = Color.Cyan
-                    )
+                        unfocusedContainerColor = Color.Cyan,
+                        errorContainerColor = inversePrimaryLight
+                    ),
+                    isError = nameError,
+                    shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
                 )
             }
+            Row {
+                val assistiveElementText =
+                    if (nameError) "Error: Obligatorio" else "*Obligatorio" // 4
+                val assistiveElementColor = if (nameError) { // 5
+                    MaterialTheme.colorScheme.error
+                } else {
+                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+
+                }
+
+            }
+            //Spacer(modifier = Modifier.size(20.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
+
                 Spacer(Modifier.weight(1f))
                 OutlinedTextField(
                     modifier = Modifier.weight(2f),
@@ -94,8 +122,10 @@ fun MenuNewPlayer(modifier: Modifier = Modifier) {
                     label = { Text(text = "Last Name") },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Color.Cyan,
-                        unfocusedContainerColor = Color.Cyan
-                    )
+                        unfocusedContainerColor = Color.Cyan,
+
+                        ),
+                    shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
                 )
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -114,7 +144,8 @@ fun MenuNewPlayer(modifier: Modifier = Modifier) {
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Color.Cyan,
                         unfocusedContainerColor = Color.Cyan
-                    )
+                    ),
+                    shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
                 )
             }
             Spacer(Modifier.size(20.dp))
@@ -188,6 +219,20 @@ fun MenuNewPlayer(modifier: Modifier = Modifier) {
                     ),
                     label = { Text(text = ("E-mail")) },
                     shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+                )
+            }
+            Spacer(Modifier.height(20.dp))
+            Row() {
+                /*  Button(
+                      onClick = { nameError = EstadoNombre.isBlank() },
+                      shape = RoundedCornerShape(15.dp)
+                  ) {
+                      Text(text = "Add new player")*/
+                ExtendedFloatingActionButton(
+                    onClick = { nameError = EstadoNombre.isBlank() },
+                    icon = { Icon(Icons.Filled.AccountCircle, "Add new player") },
+                    text = { Text(text = "Add new player") },
+                    containerColor = tertiaryLight
                 )
             }
         }
